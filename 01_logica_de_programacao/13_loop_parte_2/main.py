@@ -1,6 +1,6 @@
 # loop
 while True: 
-    try:
+    Try:
         print("valores invalidos.")
 
         print("1 - soma")
@@ -16,13 +16,10 @@ while True:
         match opçao:
             case "1":
                 resut= n1+n2
-                print(f"o resultado da soma e {result}")
-
-
-
-            
-      # todo
-        else:
+                
+                print(f"o resultado da soma e {result}" 
+      #todo
+    else:
             print("programa encerrado.")
     except:
         print("valores invalidos.")
