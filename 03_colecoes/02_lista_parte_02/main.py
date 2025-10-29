@@ -1,12 +1,13 @@
 # declaracao de lista
 
 nomes = []
+
 try:
     while True:
-        print("1 -inserir nome na lista")
-        print("2 - exibir lista")
-        print("3 - sair do programa")
-
+        print("1 -inserir nome na lista:")
+        print("2 - exibir lista:")
+        print("3 - sair do programa:")
+        opcao = input("informe a opcao desejada:")
 
         match opcao:
             case "1":
