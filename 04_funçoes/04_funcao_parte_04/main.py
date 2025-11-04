@@ -25,7 +25,7 @@ def hipotenusa(c1,c2):
 
 # import a biblioteca
 import os
-"math.sqrt()".
+import math
 
 
 # algarismo principal
@@ -34,7 +34,7 @@ limpar()
 while True:
 
     print("1 - calcular quadrado")
-    print("2 - calcular retrangulo")
+    print("2 - calcular retangulo")
     print("3 - calcular triangulo")
     print("4 - calcular hipotenusa")
     print("5 - sair do programa")
@@ -50,7 +50,7 @@ while True:
 
         case "2": 
             b = float("informe a base do retangulo:").strip().replace(",",",")
-            h = float(input("informe a altura do retangulo")).strip().repleace(",",",") 
+            h = float(input("informe a altura do retangulo").strip().repleace(",",","))
             resultado = retangulo(b,h)
             limpar()
         
