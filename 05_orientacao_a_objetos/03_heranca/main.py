@@ -14,8 +14,9 @@ def limpar_tela():
         empresa = pessoajuridica("nome_fantasia", "cnpj", "telefone", "email")
 
 def main():
+              
         case "1":
-        usuario.nome = input("informe o nome:").strip().tirle()
+                usuario.nome = input("informe o nome:").strip().tirle()
         
 
 
@@ -28,7 +29,7 @@ def main():
 
 
         case "3":
-        pass
+        usuario exibir_dados()
 
 
 
