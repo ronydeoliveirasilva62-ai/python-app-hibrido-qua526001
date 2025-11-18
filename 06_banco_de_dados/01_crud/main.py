@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from entidades import criar_tb_pessoa
-from modulo import limpar
+from modulo import limpar, cadastrar
 
 def main():
     engine = create_engine("sqlite:///01_crud/database/ccrud.db")
@@ -12,7 +12,26 @@ def main():
     session = Session()
 
     limpar()
-    #todo:fazer o CRUD
+    while True:
+        print(f"{'-'*20}😜crud da cobra😜{'-'*20}\n")
+        print("0 - sair do programa")
+        print("1 - cadastrar nova pessoa")
+        opcao = input("Opção desejada: ").strip()
+        limpar()
+        match opcao:
+            case "0":
+                print("programa encerrado.")
+                break
+            case "1":
+                print(cadastrar(session,Pessoa))
+
+                continue
+            case _:
+                print("opcao invalida.")
+                continue
+        
+    
+
 
     session.close()
 
