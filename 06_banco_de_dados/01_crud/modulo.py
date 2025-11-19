@@ -30,3 +30,104 @@ def cadastrar(session, Pessoa):
 
    except Exception as e:
       print(f"nao foi possivel cadastrar. {e}.")
+
+
+def listar(session, Pessoa):
+    try:
+      pessoas = session.query(Pessoa).all()
+
+      print("pessoaas cadastradas:\n")
+      for pessoa in pessoas:
+         print(f"ID: {pessoa.id_pessoa}")
+         print(f"nome: {pessoa.nome}")
+         print(f"e-mail: {pessoa.email}")
+         print(f"genero: {pessoa.genero}")
+         print(f"data de nascimento: {pessoa.nascimento.strftime("%d/%m/%Y")}")
+         print(f"\n{'-'*40}\n")
+    except Exception as e:
+       print(f"nao foi possivel listar.{e}.")
+
+
+def atualizar(session, Pessoa):
+   id_pessoa = ""
+   email = ""
+   novo_nome = ""
+   novo_email = ""
+   novo_nascimento = ""
+   novo_genero = ""
+
+   try:
+      print("esconha o campo que deseja pesquisar:")
+      print("1 - ID")
+      print("2 - E-mail")
+      print("3 - retornar")
+      opcao = input("opcao desejada:").strip()
+      limpar()
+      match opcao:
+         case"1":
+            id_pessoa = input("informe o ID:").strip()
+            pessoa = session.query(Pessoa).filter_by(id_pessoa=id_pessoa).first()
+
+         case"2":
+            email = input("informe o e_mail:").strip().lower()
+            pessoa = session.query(Pessoa).filter_by(email=email).filter()
+         case"3":
+            return ""
+         case _:
+            return "opcao invalida."
+         
+      if pessoa:
+         limpar()
+         while True:
+            print(f"ID{pessoa.id_pessoa}")
+            print(f"gual campo deseja alterar:\n")
+            print(f"1 - nome:{pessoa.nome}")
+            print(f"2 - E-mail:{pessoa.email}")
+            print(f"3 - data de nascimento: {pessoa.nascimento.strftime("%d/%m/%Y")}")
+            print(f"4 - genero: {pessoa.genero}")
+            print(f"5 -finalizar")
+            campo = input("campo desejado: ").strip()
+            limpar()
+            match campo:
+               case "1":
+                  novo_nome = input("informe o novo nome: ").strip().title()
+                  continue
+
+               case "2":
+                  novo_email = input("informe o novo email:").strip().lower()
+                  pessoas = session.query(Pessoa).filter(Pessoa.email == novo_email).all()
+                  if email in[pessoa.email for pessoa in pessoas]:
+                     print("email ja cadastrado")
+
+               case "3":
+                  novo_nascimento = input("informe a nova data de nascimento (dd/mm/aaaaa): ").strip()
+                  continue
+
+
+               case "4":
+                  novo_genero = input("informe o novo genero:").strip().lower()
+                  continue
+
+               case "5":
+                  novo_nome = novo_nome if novo_nome != "" else pessoa.nome
+                  novo_email = novo_email if novo_email != "" else pessoa.email
+                  novo_nascimento = datetime.strptime(novo_nascimento,"%d/%m/%Y").date() if novo_nascimento != "" else pessoa.nascimento
+                  novo_genero = novo_genero if novo_genero != "" else pessoa.genero
+                  break
+               case _:
+                  print("campo inexistente.")
+                  continue
+            pessoa.nome = novo_nome
+            pessoa.email = novo_email
+            pessoa.nascimento = novo_nascimento
+            pessoa.genero = novo_genero
+            session.commit()
+            return "dados atualizados com sucesso." 
+         else:
+            return "Pessoa nao encontrada"
+         
+
+              
+
+   except Exception as e:
+      print(f"nao foi possivel alterar os dados. {e}.")
