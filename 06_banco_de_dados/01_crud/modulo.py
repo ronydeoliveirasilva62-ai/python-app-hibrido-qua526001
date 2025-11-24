@@ -26,7 +26,7 @@ def cadastrar(session, Pessoa):
          
          session.add(nova_pessoa)
          session.commit()
-         return f"pessoa {nova_pessoa.naome} cadastrada com sucesso."
+         return f"pessoa {nova_pessoa.nome} cadastrada com sucesso."
 
    except Exception as e:
       print(f"nao foi possivel cadastrar. {e}.")
@@ -131,3 +131,49 @@ def atualizar(session, Pessoa):
 
    except Exception as e:
       print(f"nao foi possivel alterar os dados. {e}.")
+
+def deletar(session, Pessoa):
+   id_pessoa = ""
+   email = ""
+   pessoa = ""
+
+   print("informe o campo que deseja pesquisar:")
+   print("1 - id")
+   print("2 - E-mail")
+   print("3 - Retornar")
+   opcao = input("informe o campo que deseja pesquisar:").strip()
+   limpar()
+   match opcao:
+      case "1":
+         id_pessoa = input("informe o ID a ser escluido:").strip()
+         pessoa = session.query(Pessoa).filter_by(id_pessoa=id_pessoa).first()
+
+      case "2":
+         email = input("informe o email do cadastro a ser excluido:").strip().lower()
+         pessoa = session.query(Pessoa) .filter_by(email=email).first()
+
+      case "3":
+         return ""
+      case _:
+         return "opcao invalida."   
+   if pessoa:
+      limpar()
+      print(f"ID:{pessoa.id_pessoa}")
+      print(f"Nome:{pessoa.nome}")
+      print(f"E-mail:{pessoa.email}")
+      print(f"Gênero:{pessoa.genero}")
+      print(f"Data de Nascimento:{pessoa.nascimento.strftime("%d/%m/%Y")}")
+      print({'-'*40})
+      print("1 - Sim ")
+      print("2 - Nao")
+      excluir = input("tem certeza de que deseja excluir o registro?").strip()
+      match excluir:
+         case"1":
+            session.delete(pessoa)
+            session.commit()
+            return "pessoa excluida com sucesso."
+         case "2":
+            return ""
+         case _:
+            return "opcao invalida."
+
