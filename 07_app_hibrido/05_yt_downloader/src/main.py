@@ -55,11 +55,92 @@ def main(page: ft.Page):
                 ft.text(f"canal:{yt.autor}",size=12,),
                 ft.text(f"duracao:{yt.lenth/60}:{yt.length%60:02d}",size=12),
                 ft.text(f"visualizacoes:{yt.views:,}",size=12),
+            ]
+            )
+            video_info.visible = True
+            page.update()
+        except Exception as e :
+            status_text.volume = f"Erro ao obter informacoes:{str(e)}."
+            status_text.color = ft.colors.RED
+            page.update()
 
-                video_info.visible = True
+    def download_thread():
+        try:
+            progress_bar.visible =True
+            status_text.value = "analisando video..."
+            status_text.color = ft.colors.BLUE
+            page.update()
+
+            yt = youtube(url.value.strip())
+
+            mostrar_info_videos(yt)
+
+            status_text.value ="Extranindo audio de {yt.title}..."
+            page.update
+            stream =yt.streams.filter(only_audio=True).first()
+            if stream:
+                audio_file = stream.download(caminho_audios)
+
+                base, extens = os.path.splitext(audio_file)
+                novo_audio = base +".mp3"
+                os.rename(audio_file, novo_audio)
+
+                progress_bar.visible = False
+                status_text.value = f"audio salvo como {os.path.basename(novo_audio)}"
+                status_text.color = ft.colors.GREEN
                 page.update()
 
-    def baixar_videos(e)
+            else:
+                progress_bar.visible = False
+                status_text.value = "nao foi possivel baixar o audio."
+                status_text.color = ft.colors.RED
+                page.update()
+
+            threading.Thread(target=download_thread,oemon=True).start()
+    def limpar_campo(e):
+        url.value =""
+        video_info.visible = False
+        progress_bar.visible = False
+        status_text.value =""
+        page.update()
+
+        video_btn =ft.ElevatedButton(
+            text="baixar video",
+            width=150,
+            on_click=baixar_video,
+            style= ft.ButtonStyle(bgcolor= ft.colors.BLUE, color=ft.colors.white,elevation=3,text_style=ft.TextThemeStyle(size=18))
+        )
+        audio_btn =ft.ElevatedButton(
+            text="baixar audio",
+            width=150,
+            on_click=extrair_audio,
+            style= ft.ButtonStyle(bgcolor= ft.colors.BLUE, color=ft.colors.white,elevation=3,text_style=ft.TextThemeStyle(size=18))
+        )
+        clear_btn =ft.IconButton(
+            on_click=limpar_campo,
+            style=ft.ButtonStyle(
+                bgcolor=ft.colors.GREY,
+                color=ft.colors.WHITE,
+                elevation=1
+
+                
+            )
+        )
+    linha_url =ft.Row([url,clear_btn],
+                      spacing=10,
+                      alignment=ft.MainAxisAlignment.CENTER,
+                      vertical_alignment=ft.CrossAxisAlignment.CENTER)
+    
+    botoes=ft.Row([video_btn,audio_btn],
+                      spacing=15,
+                      alignment=ft.MainAxisAlignment.CENTER,
+                      vertical_alignment=ft.CrossAxisAlignment.CENTER)
+    
+    
+
+
+
+    def baixar_videos(e):
         if not url.value.strp():
            status_text.value ="por favor, insira uma URL valida."
            status_text.value = ft.colors.ORANGE
@@ -85,15 +166,39 @@ def main(page: ft.Page):
 
             #todo: fazer if else do stream
 
-            
-        ecept Exception as e:
+            if stream:
+                stream.download(caminho_videos)
+                #sucesso
+                progress_bar.visible =False
+                status_text.value = "download concluido com sucesso."
+                status_text.color = ft.colors.GREEN
+                page.update()
+            else:
+                progress_bar.visible = False
+                status_text.value = "nao foi possivel baixar o video."
+                status_text.color = ft.colors.RED
+                page.update()
+                
+        except Exception as e:
             progress_bar.visible = False 
             status_text.value = f"Erro{str(e)}."
-            srtatus_text.color = ft.colors.reversed
+            status_text.color = ft.colors.reversed
             page.update()
 
             #executa em thread separada nao travar a interface
-            threading.thread(target=donwload_download,daemon=true).start()   
+            threading.thread(target=donwload_download,daemon=true).start()  
+
+    def extrair_audio(e):
+        if not url.value.strip()
+        status_text.value = !"favor inserir uma URL"
+        status_text.color = ft.colors.ORAGE
+        page.update()
+
+        def download_thread():
+        try:
+            pass
+        except Exception as e:
+                 
 
 
 
@@ -104,10 +209,6 @@ def main(page: ft.Page):
 
 
 
-        except Exception as e :
-            status_text.volume = f"Erro ao obter informacoes:{str(e)}."
-            status_text.color = ft.colors.RED
-            page.update()
 
 
 
