@@ -2,13 +2,29 @@
 
 import flet as ft
 
+# FIXME
+
+    # ....
+
+    # def status_changed(self, e):
+    #     self.completed = self.display_task.value
+    #     self.task_status_change()
+
+# FIXME
 class Task(ft.Column):
-    def __init__(self, task_name, task_delete):
+    def __init__(self, task_name, task_status_change, task_delete):
         super().__init__()
+        self.completed = False
         self.task_name = task_name
+        self.task_status_change = task_status_change
         self.task_delete = task_delete
-        self.display_task = ft.Checkbox(value=False, label=self.task_name)
-        self.edit_name = ft.TextField(expand=1)
+        self.display_task = ft.Checkbox(
+            value=False, label=self.task_name, on_change=self.status_changed
+        )
+        # ...
+    def status_changed(self, e):
+        self.completed = self.display_task.value
+        self.task_status_change()
 
         self.display_view = ft.Row(
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
@@ -63,48 +79,14 @@ class Task(ft.Column):
 
     def delete_clicked(self, e):
         self.task_delete(self)
-
-class TodoApp(ft.Column):
-    # application's root control is a Column containing all other controls
-    def __init__(self):
-        super().__init__()
-        self.new_task = ft.TextField(hint_text="What needs to be done?", expand=True)
-        self.tasks_view = ft.Column()
-        self.width = 600
-        self.controls = [
-            ft.Row(
-                controls=[
-                    self.new_task,
-                    ft.FloatingActionButton(
-                        icon=ft.Icons.ADD, on_click=self.add_clicked
-                    ),
-                ],
-            ),
-            self.tasks_view,
-        ]
-
-    def add_clicked(self, e):
-        self.tasks_view.controls.append(ft.Checkbox(label=self.new_task.value))
-        self.new_task.value = ""
-        self.update()
-
-
-def main(page: ft.Page):
-    page.title = "To-Do App"
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.update()
-
-    # create application instance
-    todo = TodoApp()
-
-    # add application's root control to the page
-    page.add(todo)
-    
-
 # ...
 
 class TodoApp(ft.Column):
     # application's root control is a Column containing all other controls
+    # FIXME
+    # ...
+
+
     def __init__(self):
         super().__init__()
         self.new_task = ft.TextField(hint_text="What's needs to be done?", expand=True)
@@ -116,6 +98,8 @@ class TodoApp(ft.Column):
             tabs=[ft.Tab(text="all"), ft.Tab(text="active"), ft.Tab(text="completed")],
         )
     # ....
+    # FIXME: final
+    
     def before_update(self):
         status = self.filter.tabs[self.filter.selected_index].text
         for task in self.tasks.controls:
@@ -124,7 +108,14 @@ class TodoApp(ft.Column):
                 or (status == "active" and task.completed == False)
                 or (status == "completed" and task.completed)
             )
+    
+    def tabs_changed(self, e):
+        self.update()
 
+    def task_status_change(self, e):
+        self.update()
+
+    # FIXME
     def add_clicked(self, e):
         task = Task(self.new_task.value, self.task_delete)
         self.tasks.controls.append(task)
@@ -134,5 +125,29 @@ class TodoApp(ft.Column):
     def task_delete(self, task):
         self.tasks.controls.remove(task)
         self.update()
+    def tabs_changed(self, e):
+        self.update()
+
+    def task_status_change(self, e):
+        self.update()
+
+    def add_clicked(self, e):
+        task = Task(self.new_task.value, self.task_status_change, self.task_delete) 
+    
+    # FIXME: final
+
+
+def main(page: ft.Page):
+    page.title = "To-Do App"
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.update()
+
+    # create application instance
+    todo = TodoApp()
+    
+
+    # add application's root control to the page
+    page.add(todo)
+    
 
 ft.app(main)
